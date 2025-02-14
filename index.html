@@ -1,4 +1,4 @@
-<audio id="backgroundAudio" autoplay loop>
+<audio id="backgroundAudio" autoplay loop muted>
     <source src="https://drive.google.com/uc?export=download&id=1v6AZPda0t4DEsaX6uoepssBxlw5_rSKE" type="audio/mpeg">
     Your browser does not support the audio element.
 </audio>
@@ -7,17 +7,23 @@
     document.addEventListener('DOMContentLoaded', function () {
         let bgAudio = document.getElementById('backgroundAudio');
 
-        // Try playing automatically
+        // Try to autoplay (will start muted)
         let playPromise = bgAudio.play();
         if (playPromise !== undefined) {
             playPromise.then(() => {
-                console.log("Autoplay started successfully.");
+                console.log("Autoplay started (muted).");
             }).catch((error) => {
                 console.log("Autoplay blocked, waiting for user interaction.");
-                document.addEventListener("click", function() {
-                    bgAudio.play();
-                }, { once: true });
             });
         }
+
+        // Unmute and play audio when user clicks anywhere
+        document.addEventListener("click", function() {
+            if (bgAudio.muted) {
+                bgAudio.muted = false;
+                bgAudio.play();
+                console.log("User clicked, unmuting and playing audio.");
+            }
+        }, { once: true }); // Runs only once
     });
 </script>
