@@ -1,5 +1,5 @@
 <audio id="backgroundAudio" autoplay loop>
-    <source src="https://drive.google.com/uc?export=open&id=1v6AZPda0t4DEsaX6uoepssBxlw5_rSKE" type="audio/mpeg">
+    <source src="https://drive.google.com/uc?export=download&id=1v6AZPda0t4DEsaX6uoepssBxlw5_rSKE" type="audio/mpeg">
     Your browser does not support the audio element.
 </audio>
 
@@ -7,25 +7,17 @@
     document.addEventListener('DOMContentLoaded', function () {
         let bgAudio = document.getElementById('backgroundAudio');
 
-        // Ensure autoplay works by handling browser restrictions
+        // Try playing automatically
         let playPromise = bgAudio.play();
         if (playPromise !== undefined) {
-            playPromise.then(_ => {
-                // Autoplay started successfully
-            }).catch(error => {
-                // Autoplay blocked, require user interaction
-                console.log("Autoplay blocked. User interaction needed.");
+            playPromise.then(() => {
+                console.log("Autoplay started successfully.");
+            }).catch((error) => {
+                console.log("Autoplay blocked, waiting for user interaction.");
+                document.addEventListener("click", function() {
+                    bgAudio.play();
+                }, { once: true });
             });
         }
-
-        // Mute background audio if another audio is playing
-        document.addEventListener("play", function(event) {
-            let audios = document.getElementsByTagName("audio");
-            for (let i = 0; i < audios.length; i++) {
-                if (audios[i] !== event.target) {
-                    audios[i].muted = true;
-                }
-            }
-        }, true);
     });
 </script>
